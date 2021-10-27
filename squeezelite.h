@@ -26,7 +26,7 @@
 
 #define MAJOR_VERSION "1.9"
 #define MINOR_VERSION "9"
-#define MICRO_VERSION "1390"
+#define MICRO_VERSION "1391"
 #define CUSTOM_VERSION -sc-001
 
 #if defined(CUSTOM_VERSION)
