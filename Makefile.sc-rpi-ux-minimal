@@ -24,7 +24,7 @@ MTUNE := -mtune=$(CPART)
 
 
 ifeq ($(bitd_s),64)
-   TUNEOPTS :=
+   TUNEOPTS := 
 else ifeq ($(bitd_s),32)
    TUNEOPTS := -mfpu=neon-fp-armv8 -mfloat-abi=hard
 endif
@@ -36,6 +36,6 @@ endif
 # $(info MTUNE=$(MTUNE))
 
 OPTS = -DNO_FAAD
-CFLAGS = -Wall -fPIC -O3 $(MARCH) $(MTUNE) $(TUNEOPTS) -pipe
+CFLAGS = -Wall -fPIC -Ofast $(MARCH) $(MTUNE) $(TUNEOPTS) -pipe
 
-include Makefile
+include Makefile.sc-rpi-ux
