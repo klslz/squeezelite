@@ -51,8 +51,12 @@ static int header_mlen;
 struct streamstate stream;
 
 #if USE_SSL
+#if WIN
+#define _last_error() WSAGetLastError()
+#define ERROR_WOULDBLOCK WSAEWOULDBLOCK
+#else
 #define _last_error() ERROR_WOULDBLOCK
-
+#endif
 static SSL_CTX *SSLctx;
 SSL *ssl;
 
@@ -400,6 +404,7 @@ static void *stream_thread() {
 				// stream body into streambuf
 				} else {
 					int n;
+					int error;
 
 					space = min(_buf_space(streambuf), _buf_cont_write(streambuf));
 					if (stream.meta_interval) {
@@ -411,9 +416,12 @@ static void *stream_thread() {
 						LOG_INFO("end of stream (%u bytes)", stream.bytes);
 						_disconnect(DISCONNECT, DISCONNECT_OK);
 					}
-					if (n < 0 && _last_error() != ERROR_WOULDBLOCK) {
-						LOG_INFO("error reading: %s", strerror(last_error()));
-						_disconnect(DISCONNECT, REMOTE_DISCONNECT);
+					if (n < 0) {
+						error = _last_error();
+						if (error != ERROR_WOULDBLOCK) {
+							LOG_INFO("error reading: %s (%d)", strerror(error), error);
+							_disconnect(DISCONNECT, REMOTE_DISCONNECT);
+						}
 					}
 					
 					if (n > 0) {

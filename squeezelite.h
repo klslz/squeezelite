@@ -26,7 +26,7 @@
 
 #define MAJOR_VERSION "1.9"
 #define MINOR_VERSION "9"
-#define MICRO_VERSION "1392"
+#define MICRO_VERSION "1412"
 #define CUSTOM_VERSION -sc-001
 
 #if defined(CUSTOM_VERSION)
@@ -191,7 +191,7 @@
 // dynamically loaded libraries at run time
 
 #if LINUX
-#define LIBFLAC "libFLAC.so.8"
+#define LIBFLAC "libFLAC.so.%d"
 #define LIBMAD  "libmad.so.0"
 #define LIBMPG "libmpg123.so.0"
 #define LIBVORBIS "libvorbisfile.so.3"
@@ -206,7 +206,7 @@
 #endif
 
 #if OSX
-#define LIBFLAC "libFLAC.8.dylib"
+#define LIBFLAC "libFLAC.%d.dylib"
 #define LIBMAD  "libmad.0.dylib"
 #define LIBMPG "libmpg123.0.dylib"
 #define LIBVORBIS "libvorbisfile.3.dylib"
@@ -234,7 +234,7 @@
 #endif
 
 #if FREEBSD
-#define LIBFLAC "libFLAC.so.8"
+#define LIBFLAC "libFLAC.so.%d"
 #define LIBMAD  "libmad.so.0"
 #define LIBMPG "libmpg123.so.0"
 #define LIBVORBIS "libvorbisfile.so.3"
