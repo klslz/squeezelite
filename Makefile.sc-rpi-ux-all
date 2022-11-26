@@ -1,0 +1,40 @@
+# RPI makefile for Ux systems that autodetects
+#  - bitdepth of system
+#  - RPi standard and CM models ( 3 or 4 )
+# and applies optimal processor specific compiler options
+
+SHELL := /bin/sh
+
+bitd_s := $(shell getconf LONG_BIT)
+#RPI4
+CPART := $(shell cat /proc/cpuinfo | grep part | grep -q 0xd08 && echo cortex-a72)
+#RPI3
+ifndef CPART
+   CPART := $(shell cat /proc/cpuinfo | grep part | grep -q 0xd03 && echo cortex-a53)
+endif
+
+ifndef CPART
+   $(error "Problems identifiying RPi 3 or 4!")
+endif
+
+
+MARCH := -march=armv8-a+crc
+MTUNE := -mtune=$(CPART)
+
+
+ifeq ($(bitd_s),64)
+   TUNEOPTS :=
+else ifeq ($(bitd_s),32)
+   TUNEOPTS := -mfpu=neon-fp-armv8 -mfloat-abi=hard
+endif
+
+# $(info bitd_s=$(bitd_s))
+# $(info rpi_m=$(rpi_m))
+# $(info TUNEOPTS=$(TUNEOPTS))
+# $(info MARCH=$(MARCH))
+# $(info MTUNE=$(MTUNE))
+
+OPTS = -DLINKALL -DRESAMPLE -DDSD
+CFLAGS = -Wall -fPIC -O3 $(MARCH) $(MTUNE) $(TUNEOPTS) -pipe
+
+include Makefile
