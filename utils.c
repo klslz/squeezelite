@@ -287,6 +287,16 @@ void set_nonblock(sockfd s) {
 #endif
 }
 
+// Reduce TCP receive buffer size to avoid WSAECONNRESET socket errors on windows.
+void set_recvbufsize(sockfd s) {
+#if WIN
+	int opt;
+	int len = sizeof(opt);
+	getsockopt(s, SOL_SOCKET, SO_RCVBUF, (void*) &opt, &len);
+	setsockopt(s, SOL_SOCKET, SO_RCVBUF, (void*) &opt, sizeof(opt));
+#endif
+}
+
 // connect for socket already set to non blocking with timeout in seconds
 int connect_timeout(sockfd sock, const struct sockaddr *addr, socklen_t addrlen, int timeout) {
 	fd_set w, e;
