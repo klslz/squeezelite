@@ -2,7 +2,7 @@
  *  Squeezelite - lightweight headless squeezebox emulator
  *
  *  (c) Adrian Smith 2012-2015, triode1@btinternet.com
- *      Ralph Irving 2015-2021, ralph_irving@hotmail.com
+ *      Ralph Irving 2015-2023, ralph_irving@hotmail.com
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -499,7 +499,7 @@ void touch_memory(u8_t *buf, size_t size) {
 }
 #endif
 
-#if WIN
+#if WIN || SUN
 char *strcasestr(const char *haystack, const char *needle) {
 	size_t length_needle;
 	size_t length_haystack;

@@ -2,7 +2,7 @@
  *  Squeezelite - lightweight headless squeezebox emulator
  *
  *  (c) Adrian Smith 2012-2015, triode1@btinternet.com
- *      Ralph Irving 2015-2021, ralph_irving@hotmail.com
+ *      Ralph Irving 2015-2023, ralph_irving@hotmail.com
  *  
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Additions (c) Paul Hermann, 2015-2021 under the same license terms
+ * Additions (c) Paul Hermann, 2015-2023 under the same license terms
  *   -Control of Raspberry pi GPIO for amplifier power
  *   -Launch script on power status change from LMS
  */
@@ -26,8 +26,8 @@
 
 #define MAJOR_VERSION "1.9"
 #define MINOR_VERSION "9"
-#define MICRO_VERSION "1419"
-#define CUSTOM_VERSION -sc-004
+#define MICRO_VERSION "1422"
+#define CUSTOM_VERSION -sc-005
 
 #if defined(CUSTOM_VERSION)
 #define VERSION "v" MAJOR_VERSION "." MINOR_VERSION "-" MICRO_VERSION STR(CUSTOM_VERSION)
@@ -291,6 +291,7 @@
 #include <sys/prctl.h>
 #include <signal.h>
 #if SUN
+#include <ctype.h>
 #include <sys/types.h>
 #endif /* SUN */
 
@@ -458,7 +459,7 @@ void logprint(const char *fmt, ...);
 
 // utils.c (non logging)
 typedef enum { EVENT_TIMEOUT = 0, EVENT_READ, EVENT_WAKE } event_type;
-#if WIN && USE_SSL
+#if WIN || SUN
 char* strcasestr(const char *haystack, const char *needle);
 #endif
 
