@@ -3,6 +3,7 @@
  *
  *  (c) Adrian Smith 2012-2015, triode1@btinternet.com
  *      Ralph Irving 2015-2023, ralph_irving@hotmail.com
+ *      Klaus Schulz 2019-2023, klsschlz@gmail.com
  *  
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,8 +27,8 @@
 
 #define MAJOR_VERSION "1.9"
 #define MINOR_VERSION "9"
-#define MICRO_VERSION "1422"
-#define CUSTOM_VERSION -sc-005
+#define MICRO_VERSION "1449"
+#define CUSTOM_VERSION -sc-006
 
 #if defined(CUSTOM_VERSION)
 #define VERSION "v" MAJOR_VERSION "." MINOR_VERSION "-" MICRO_VERSION STR(CUSTOM_VERSION)
