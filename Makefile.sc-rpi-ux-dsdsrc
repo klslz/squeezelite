@@ -1,24 +1,38 @@
-# RPI makefile for Ux systems that autodetects
+# RPI makefile for UX systems that autodetects
 #  - bitdepth of system
-#  - RPi standard and CM models ( 3 or 4 )
+#  - RPi standard and CM models 3,4,5
 # and applies optimal processor specific compiler options
 
 SHELL := /bin/sh
 
 bitd_s := $(shell getconf LONG_BIT)
+
+#RPI5
+CPART := $(shell cat /proc/cpuinfo | grep part | grep -q 0xd0b && echo cortex-a76)
+
 #RPI4
-CPART := $(shell cat /proc/cpuinfo | grep part | grep -q 0xd08 && echo cortex-a72)
+ifndef CPART
+   CPART := $(shell cat /proc/cpuinfo | grep part | grep -q 0xd08 && echo cortex-a72)
+endif
+
 #RPI3
 ifndef CPART
    CPART := $(shell cat /proc/cpuinfo | grep part | grep -q 0xd03 && echo cortex-a53)
 endif
 
+
 ifndef CPART
-   $(error "Problems identifiying RPi 3 or 4!")
+   $(error "Problems identifiying RPi 3,4 or 5!")
 endif
 
+#RPI5
+ifeq ($(CPART),cortex-a76)
+    MARCH := -march=armv8.2-a+crypto+fp16+rcpc+dotprod
+#RPI4
+else ifeq ($(CPART),cortex-a72)
+    MARCH := -march=armv8-a+crc
+endif
 
-MARCH := -march=armv8-a+crc
 MTUNE := -mtune=$(CPART)
 
 
@@ -37,4 +51,4 @@ endif
 OPTS = -DRESAMPLE -DDSD
 CFLAGS = -Wall -fPIC -O3 $(MARCH) $(MTUNE) $(TUNEOPTS) -pipe
 
-include Makefile
+include Makefile.sc-rpi-ux
