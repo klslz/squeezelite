@@ -2,8 +2,8 @@
  *  Squeezelite - lightweight headless squeezebox emulator
  *
  *  (c) Adrian Smith 2012-2015, triode1@btinternet.com
- *      Ralph Irving 2015-2023, ralph_irving@hotmail.com
- *	Philippe 2018-2023, philippe_44@outlook.com
+ *      Ralph Irving 2015-2024, ralph_irving@hotmail.com
+ *	Philippe 2018-2024, philippe_44@outlook.com
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -102,7 +102,7 @@ static int _read_cb(void *datasource, char *ptr, int size) {
 		LOCK_S;
 		bytes = min(_buf_used(streambuf), _buf_cont_read(streambuf));
 		bytes = min(bytes, size);
-		if (bytes || stream.state <= DISCONNECT) break;
+		if (bytes || stream.state <= DISCONNECT || !decode.new_stream) break;
 
 		UNLOCK_S;
 		usleep(50 * 1000);

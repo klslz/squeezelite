@@ -2,13 +2,9 @@
  *  Squeezelite - lightweight headless squeezebox emulator
  *
  *  (c) Adrian Smith 2012-2015, triode1@btinternet.com
-<<<<<<< HEAD
- *      Ralph Irving 2015-2021, ralph_irving@hotmail.com
- *  (c) Modified work Copyright Klaus Schulz 2020-2021
-=======
- *      Ralph Irving 2015-2023, ralph_irving@hotmail.com
->>>>>>> master
- *  
+ *      Ralph Irving 2015-2024, ralph_irving@hotmail.com
+ *  (c) Klaus Schulz 2020-2024, kls.schlz@gmail.com - for modifications
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -22,7 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Additions (c) Paul Hermann, 2015-2023 under the same license terms
+ * Additions (c) Paul Hermann, 2015-2024 under the same license terms
  *   -Control of Raspberry pi GPIO for amplifier power
  *   -Launch script on power status change from LMS
  */
@@ -31,7 +27,7 @@
 
 #include <signal.h>
 
-#define TITLE "Squeezelite " VERSION ", Copyright 2012-2015 Adrian Smith, 2015-2023 Ralph Irving, 2020-2023 Klaus Schulz."
+#define TITLE "Squeezelite " VERSION ", Copyright 2012-2015 Adrian Smith, 2015-2024 Ralph Irving, 2020-2024 Klaus Schulz."
 
 #define CODECS_BASE "flac,pcm,ogg"
 #if NO_FAAD
@@ -87,7 +83,7 @@ static void usage(const char *argv0) {
 #endif
 #endif
 		   "  -a <f>\t\tSpecify sample format (16|24|32) of output file when using -o - to output samples to stdout (interleaved little endian only)\n"
-		   "  -b <stream>:<output>\tSpecify internal Stream and Output buffer sizes in Kbytes\n"
+		   "  -b <stream>:<output>\tSpecify internal Stream and Output buffer sizes in Kbytes. Default is %d:%d\n"
 		   "  -c <codec1>,<codec2>\tRestrict codecs to those specified, otherwise load all available codecs; known codecs: " CODECS "\n"
 		   "  \t\t\tCodecs reported to LMS in order listed, allowing codec priority refinement.\n"
 		   "  -C <timeout>\t\tClose output device when idle after timeout seconds, default is to keep it open while player is 'on'\n"
@@ -97,7 +93,7 @@ static void usage(const char *argv0) {
 		   "  -d <log>=<level>\tSet logging level, logs: all|slimproto|stream|decode|output|ir, level: info|debug|sdebug\n"
 #endif
 #if defined(GPIO) && defined(RPI)
-		   "  -G <Rpi GPIO#>:<H/L>\tSpecify the BCM GPIO# to use for Amp Power Relay and if the output should be Active High or Low\n"
+		   "  -G <GPIO Chip #>:<GPIO Line #>:<H/L>\tSpecify the GPIO chip number, GPIO line# to use for Amp Power Relay and if the output should be Active High or Low\n"
 #endif
 		   "  -e <codec1>,<codec2>\tExplicitly exclude native support of one or more codecs; known codecs: " CODECS "\n"
 		   "  -f <logfile>\t\tWrite debug to logfile\n"
@@ -245,7 +241,7 @@ static void usage(const char *argv0) {
 		   " LINKALL"
 #endif
 		   "\n\n",
-		   argv0);
+		   argv0,STREAMBUF_SIZE/1024,OUTPUTBUF_SIZE/1024);
 }
 
 static void license(void) {
@@ -279,20 +275,17 @@ static void license(void) {
 #endif
 		   "\nOption to allow server side upsampling for PCM streams (-W) from\n"
 		   "squeezelite-R2 (c) Marco Curti 2015, marcoc1712@gmail.com.\n"
-#if RPI
-		   "\nContains minimal GPIO Interface <http://abyz.me.uk/rpi/pigpio/>.\n"
-#endif
 #if FFMPEG
 		   "\nThis software uses libraries from the FFmpeg project under\n"
 		   "the LGPLv2.1 and its source can be downloaded from\n"
 		   "<https://sourceforge.net/projects/lmsclients/files/source/>\n"
 #endif
 #if OPUS
-		   "\nOpus decoder support (c) Philippe 2018-2023, philippe_44@outlook.com\n"
+		   "\nOpus decoder support (c) Philippe 2018-2024, philippe_44@outlook.com\n"
 #endif
 #if ALAC	
 		   "\nContains Apple Lossless (ALAC) decoder. Apache License Version 2.0\n"
-		   "Apple ALAC decoder support (c) Philippe 2018-2023, philippe_44@outlook.com\n"
+		   "Apple ALAC decoder support (c) Philippe 2018-2024, philippe_44@outlook.com\n"
 #endif
 		   "\n"
 		   );
@@ -348,7 +341,7 @@ int main(int argc, char **argv) {
 #if IR
 	char *lircrc = NULL;
 #endif
-	
+
 	log_level log_output = lWARN;
 	log_level log_stream = lWARN;
 	log_level log_decode = lWARN;
@@ -649,8 +642,10 @@ int main(int argc, char **argv) {
 				exit(1);
 			}
 			if (optind < argc && argv[optind] && argv[optind][0] != '-') {
-				char *gp = next_param(argv[optind++], ':');
+				char *gch = next_param(argv[optind++], ':');
+				char *gp = next_param (NULL, ':');
 				char *go = next_param (NULL, ':');
+				gpio_chip = atoi(gch);
 				gpio_pin = atoi(gp);
 				if (go != NULL){
 					if ((strcmp(go, "H")==0)|(strcmp(go, "h")==0)){
@@ -658,7 +653,7 @@ int main(int argc, char **argv) {
 					}else if((strcmp(go, "L")==0)|(strcmp(go, "l")==0)){
 						gpio_active_low=true;
 					}else{
-						fprintf(stderr,"Must set output to be active High or Low i.e. -G18:H or -G18:L\n");
+						fprintf(stderr,"Must set output to be active High or Low i.e. -G 0:18:H or -G 0:18:L\n");
 						usage(argv[0]);
 						exit(1);
 					}
@@ -667,8 +662,14 @@ int main(int argc, char **argv) {
 					usage(argv[0]);
 					exit(1);
 				}
-				gpio_active = true;
-				relay(0);
+				if (gpio_init()){
+					gpio_active = true;
+					relay(0);
+				} else {
+					fprintf(stderr, "Error initializing gpio interface.\n");
+					usage(argv[0]);
+					exit(1);
+				}
 
 			} else {
 				fprintf(stderr, "Error in GPIO Pin assignment.\n");
@@ -856,6 +857,10 @@ int main(int argc, char **argv) {
 		output_close_pulse();
 #endif
 	}
+
+#if RPI
+	gpio_close();
+#endif
 
 #if IR
 	ir_close();

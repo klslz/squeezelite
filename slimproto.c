@@ -2,7 +2,7 @@
  *  Squeezelite - lightweight headless squeezebox emulator
  *
  *  (c) Adrian Smith 2012-2015, triode1@btinternet.com
- *      Ralph Irving 2015-2023, ralph_irving@hotmail.com
+ *      Ralph Irving 2015-2024, ralph_irving@hotmail.com
  *  
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Additions (c) Paul Hermann, 2015-2023 under the same license terms
+ * Additions (c) Paul Hermann, 2015-2024 under the same license terms
  *   -Control of Raspberry pi GPIO for amplifier power
  *   -Launch script on power status change from LMS
  */
@@ -275,6 +275,7 @@ void sendIR(u32_t code, u32_t ts) {
 #endif
 
 static void process_strm(u8_t *pkt, int len) {
+	bool flushed;
 	struct strm_packet *strm = (struct strm_packet *)pkt;
 
 	LOG_DEBUG("strm command %c", strm->command);
@@ -291,15 +292,17 @@ static void process_strm(u8_t *pkt, int len) {
 		sendSTAT("STMf", 0);
 		buf_flush(streambuf);
 		break;
-	case 'f':
-		decode_flush();
-		output_flush();
-		status.frames_played = 0;
-		if (stream_disconnect()) {
-			sendSTAT("STMf", 0);
+	case 'f': 
+		{
+			decode_flush();
+			// we can have fully finished the current streaming, that's still a flush
+			flushed = output_flush_streaming();
+			if (stream_disconnect() || flushed) {
+				sendSTAT("STMf", 0);
+			}
+			buf_flush(streambuf);
+			break;
 		}
-		buf_flush(streambuf);
-		break;
 	case 'p':
 		{
 			unsigned interval = unpackN(&strm->replay_gain);

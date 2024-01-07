@@ -1,4 +1,4 @@
-Squeezelite v1.9.x, Copyright 2012-2015 Adrian Smith, 2015-2023 Ralph Irving.<br>
+Squeezelite v1.9.x, Copyright 2012-2015 Adrian Smith, 2015-2024 Ralph Irving.<br>
 <br>
 See the squeezelite manpage for usage details.<br>
 https://ralph-irving.github.io/squeezelite.html<br>
@@ -34,9 +34,6 @@ which is subject to its own license.<br>
 <br>
 Option to allow server side upsampling for PCM streams (-W) from<br>
 squeezelite-R2 (c) Marco Curti 2015, marcoc1712@gmail.com.<br>
-<br>
-RaspberryPi minimal GPIO Interface<br>
-http://abyz.me.uk/rpi/pigpio/examples.html#Misc_minimal_gpio.<br>
 <br>
 This software uses libraries from the FFmpeg project under<br>
 the LGPLv2.1 and its source can be downloaded from<br>

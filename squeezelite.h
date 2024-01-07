@@ -2,8 +2,8 @@
  *  Squeezelite - lightweight headless squeezebox emulator
  *
  *  (c) Adrian Smith 2012-2015, triode1@btinternet.com
- *      Ralph Irving 2015-2023, ralph_irving@hotmail.com
- *      Klaus Schulz 2019-2023, klsschlz@gmail.com
+ *      Ralph Irving 2015-2024, ralph_irving@hotmail.com
+ *  (c) Klaus Schulz 2019-2024, kls.schlz@gmail.com for modifications
  *  
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,17 +18,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- * Additions (c) Paul Hermann, 2015-2023 under the same license terms
+ * Additions (c) Paul Hermann, 2015-2024 under the same license terms
  *   -Control of Raspberry pi GPIO for amplifier power
  *   -Launch script on power status change from LMS
  */
 
 // make may define: PORTAUDIO, SELFPIPE, RESAMPLE, RESAMPLE_MP, VISEXPORT, GPIO, IR, DSD, LINKALL to influence build
 
-#define MAJOR_VERSION "1.9"
-#define MINOR_VERSION "9"
-#define MICRO_VERSION "1449"
-#define CUSTOM_VERSION -sc-007
+#define MAJOR_VERSION "2.0"
+#define MINOR_VERSION "0"
+#define MICRO_VERSION "1465"
+#define CUSTOM_VERSION -sc-008
 
 #if defined(CUSTOM_VERSION)
 #define VERSION "v" MAJOR_VERSION "." MINOR_VERSION "-" MICRO_VERSION STR(CUSTOM_VERSION)
@@ -691,6 +691,7 @@ struct outputstate {
 void output_init_common(log_level level, const char *device, unsigned output_buf_size, unsigned rates[], unsigned idle);
 void output_close_common(void);
 void output_flush(void);
+bool output_flush_streaming(void);
 // _* called with mutex locked
 frames_t _output_frames(frames_t avail);
 void _checkfade(bool);
@@ -777,21 +778,17 @@ struct codec *register_opus(void);
 #if GPIO
 void relay(int state);
 void relay_script(int state);
-int gpio_pin;
-bool gpio_active_low;
 bool gpio_active;
 char *power_script;
 
 #if RPI
-#define PI_INPUT  0
-#define PI_OUTPUT 1
-#define PI_LOW 0
-#define PI_HIGH 1
-void gpioSetMode(unsigned gpio, unsigned mode);
-void gpioWrite(unsigned gpio, unsigned level);
-int gpioInitialise(void);
-#endif
-#endif
+int gpio_chip;
+int gpio_pin;
+bool gpio_active_low;
+bool gpio_init();
+void gpio_close();
+#endif // RPI
+#endif //GPIO
 
 // ir.c
 #if IR
