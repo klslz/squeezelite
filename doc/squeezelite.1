@@ -4,7 +4,7 @@
 .\" First parameter, NAME, should be all caps
 .\" Second parameter, SECTION, should be 1-8, maybe w/ subsection
 .\" other parameters are allowed: see man(7), man(1)
-.TH SQUEEZELITE 1 "2020-07-16" "Debian Project"
+.TH SQUEEZELITE 1 "2024-04-03" "Debian Project"
 .\" Please adjust this date whenever revising the manpage.
 .\"
 .\" Some roff macros, for reference:
@@ -27,7 +27,7 @@ squeezelite \- Lightweight headless Squeezebox emulator
 is a small headless Logitech Squeezebox emulator. It is aimed at supporting high
 quality audio including USB DAC based output at multiple sample rates.
 .PP
-The player is controlled using, and media is streamed from, a Logitech Media
+The player is controlled using, and media is streamed from, a Lyrion Music
 Server instance running somewhere on the local network.
 .SH OPTIONS
 This program supports the following options:
@@ -36,7 +36,7 @@ This program supports the following options:
 Show a summary of the available command-line options.
 .TP
 .B \-s <server>[:<port>]
-Connect to the specified Logitech Media Server, otherwise uses automatic
+Connect to the specified Lyrion Music Server, otherwise uses automatic
 discovery to find server on the local network. This option should only be needed
 if automatic discovery does not work, or the server is not on the local network
 segment (e.g. behind a router).
@@ -164,7 +164,7 @@ Override the player's hardware model name. The default value is
 .IR SqueezeLite .
 .TP
 .B \-n <name>
-Set the player name. This name is used by the Logitech Media Server to refer to
+Set the player name. This name is used by the Lyrion Music Server to refer to
 the player by name. This option is mututally exclusive with
 .BR \-N .
 .TP
@@ -303,19 +303,16 @@ to max device rate.
 The second optional argument to \fB\-u\fR allows the user to specify the
 following arguments (taken from the \fIsoxr.h\fR header file), in hex:
 .sp
+.nf
 #define SOXR_ROLLOFF_SMALL     0u  /* <= 0.01 dB */
-.br
 #define SOXR_ROLLOFF_MEDIUM    1u  /* <= 0.35 dB */
-.br
 #define SOXR_ROLLOFF_NONE      2u  /* For Chebyshev bandwidth. */
-.sp
+
 #define SOXR_MAINTAIN_3DB_PT   4u  /* Reserved for internal use. */
-.br
 #define SOXR_HI_PREC_CLOCK     8u  /* Increase 'irrational' ratio accuracy. */
-.br
 #define SOXR_DOUBLE_PRECISION 16u  /* Use D.P. calcs even if precision <= 20. */
-.br
 #define SOXR_VR               32u  /* Experimental, variable-rate resampling. */
+.fi
 .TP
 .B Examples
 .B \-u :2
@@ -373,7 +370,7 @@ specifies linear phase.
 .TP
 http://wiki.slimdevices.com/index.php/Squeezelite
 .TP
-http://wiki.slimdevices.com/index.php/Logitech_Media_Server
+https://lyrion.org/
 .TP
 sox(1)
 for further information about resampling.

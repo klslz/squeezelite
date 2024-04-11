@@ -207,6 +207,9 @@ static void usage(const char *argv0) {
 #if OPUS
 		   " OPUS"
 #endif
+#if USE_LIBOGG
+		   " OGGMETA"
+#endif
 #if NO_FAAD
 		   " NO_FAAD"
 #endif
