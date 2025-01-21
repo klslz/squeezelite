@@ -31,11 +31,7 @@
 
 #include <signal.h>
 
-<<<<<<< HEAD
-#define TITLE "Squeezelite " VERSION ", Copyright 2012-2015 Adrian Smith, 2015-2025 Ralph Irving, 2020-2024 Klaus Schulz."
-=======
-#define TITLE "Squeezelite " VERSION ", Copyright 2012-2015 Adrian Smith, 2015-2025 Ralph Irving."
->>>>>>> master
+#define TITLE "Squeezelite " VERSION ", Copyright 2012-2015 Adrian Smith, 2015-2025 Ralph Irving, 2020-2025 Klaus Schulz."
 
 #define CODECS_BASE "flac,pcm,ogg"
 #if NO_FAAD
@@ -218,12 +214,9 @@ static void usage(const char *argv0) {
 #if USE_LIBOGG
 		   " OGGMETA"
 #endif
-<<<<<<< HEAD
-=======
 #if defined(TREMOR_ONLY)
 		   " TREMOR"
 #endif
->>>>>>> master
 #if NO_FAAD
 		   " NO_FAAD"
 #endif
