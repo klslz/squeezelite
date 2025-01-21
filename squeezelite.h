@@ -3,7 +3,7 @@
  *
  *  (c) Adrian Smith 2012-2015, triode1@btinternet.com
  *      Ralph Irving 2015-2025, ralph_irving@hotmail.com
- *  (c) Klaus Schulz 2019-2024, kls.schlz@gmail.com for modifications
+ *  (c) Klaus Schulz 2019-2025, kls.schlz@gmail.com for modifications
  *  
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,13 +27,13 @@
 
 #define MAJOR_VERSION "2.0"
 #define MINOR_VERSION "0"
-#define MICRO_VERSION "1481"
-#define CUSTOM_VERSION -sc-009
+#define MICRO_VERSION "1518"
+#define CUSTOM_VERSION -sc-010
 
 #if defined(CUSTOM_VERSION)
-#define VERSION "v" MAJOR_VERSION "." MINOR_VERSION "-" MICRO_VERSION STR(CUSTOM_VERSION)
+#define VERSION MAJOR_VERSION "." MINOR_VERSION "-" MICRO_VERSION STR(CUSTOM_VERSION)
 #else
-#define VERSION "v" MAJOR_VERSION "." MINOR_VERSION "-" MICRO_VERSION
+#define VERSION MAJOR_VERSION "." MINOR_VERSION "-" MICRO_VERSION
 #endif
 
 

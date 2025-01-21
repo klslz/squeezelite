@@ -3,8 +3,12 @@
  *
  *  (c) Adrian Smith 2012-2015, triode1@btinternet.com
  *      Ralph Irving 2015-2025, ralph_irving@hotmail.com
+<<<<<<< HEAD
  *  (c) Klaus Schulz 2020-2024, kls.schlz@gmail.com - for modifications
  *
+=======
+ *  
+>>>>>>> master
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -27,7 +31,11 @@
 
 #include <signal.h>
 
+<<<<<<< HEAD
 #define TITLE "Squeezelite " VERSION ", Copyright 2012-2015 Adrian Smith, 2015-2025 Ralph Irving, 2020-2024 Klaus Schulz."
+=======
+#define TITLE "Squeezelite " VERSION ", Copyright 2012-2015 Adrian Smith, 2015-2025 Ralph Irving."
+>>>>>>> master
 
 #define CODECS_BASE "flac,pcm,ogg"
 #if NO_FAAD
@@ -210,6 +218,12 @@ static void usage(const char *argv0) {
 #if USE_LIBOGG
 		   " OGGMETA"
 #endif
+<<<<<<< HEAD
+=======
+#if defined(TREMOR_ONLY)
+		   " TREMOR"
+#endif
+>>>>>>> master
 #if NO_FAAD
 		   " NO_FAAD"
 #endif
@@ -284,11 +298,19 @@ static void license(void) {
 		   "<https://sourceforge.net/projects/lmsclients/files/source/>\n"
 #endif
 #if OPUS
+<<<<<<< HEAD
 		   "\nOpus decoder support (c) Philippe 2018-2024, philippe_44@outlook.com\n"
 #endif
 #if ALAC	
 		   "\nContains Apple Lossless (ALAC) decoder. Apache License Version 2.0\n"
 		   "Apple ALAC decoder support (c) Philippe 2018-2024, philippe_44@outlook.com\n"
+=======
+		   "\nOpus decoder support (c) Philippe 2018-2025, philippe_44@outlook.com\n"
+#endif
+#if ALAC	
+		   "\nContains Apple Lossless (ALAC) decoder. Apache License Version 2.0\n"
+		   "Apple ALAC decoder support (c) Philippe 2018-2025, philippe_44@outlook.com\n"
+>>>>>>> master
 #endif
 		   "\n"
 		   );
@@ -469,14 +491,10 @@ int main(int argc, char **argv) {
 			{
 				int byte = 0;
 				char *tmp;
-				if (!strncmp(optarg, "00:04:20", 8)) {
-					LOG_ERROR("ignoring mac address from hardware player range 00:04:20:**:**:**");
-				} else {
-					char *t = strtok(optarg, ":");
-					while (t && byte < 6) {
-						mac[byte++] = (u8_t)strtoul(t, &tmp, 16);
-						t = strtok(NULL, ":");
-					}
+				char *t = strtok(optarg, ":");
+				while (t && byte < 6) {
+					mac[byte++] = (u8_t)strtoul(t, &tmp, 16);
+					t = strtok(NULL, ":");
 				}
 			}
 			break;
