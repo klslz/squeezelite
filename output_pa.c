@@ -216,8 +216,7 @@ bool test_open(const char *device, unsigned rates[], bool userdef_rates) {
 			case paInvalidSampleRate:
 				LOG_DEBUG("sample rate %u not supported", ref[i]);
 				continue;
-#if WIN
-#ifndef PA18API
+#if WIN && !defined (PA18API)
 			/* Ignore these errors for device probe */
 			case paUnanticipatedHostError:
 				continue;
@@ -225,6 +224,10 @@ bool test_open(const char *device, unsigned rates[], bool userdef_rates) {
 			case paInvalidDevice:
 				continue;
 #endif
+#if SUN && defined (PA18API)
+			/* Ignore this error during device probe */
+			case paHostError:
+				continue;
 #endif
 			case paNoError:
 				Pa_CloseStream(pa.stream);
@@ -235,7 +238,7 @@ bool test_open(const char *device, unsigned rates[], bool userdef_rates) {
 
 			default:	
 				/* Any other error is a failure */
-				LOG_WARN("error opening portaudio stream: %s", Pa_GetErrorText(err));
+				LOG_WARN("error opening portaudio stream: %s (%d)", Pa_GetErrorText(err), err);
 				return false;
 		}
 	}
