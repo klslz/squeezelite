@@ -1,4 +1,4 @@
-OPTS = -DOPUS -DALAC -DRESAMPLE -DVISEXPORT -DDSD -DIR -DGPIO -DRPI -DUSE_SSL -DLINKALL -I./include -I./include/opus -I./include/alac -I/usr/local/include -s -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s
+OPTS = -DOPUS -DALAC -DRESAMPLE -DVISEXPORT -DDSD -DUSE_LIBOGG -DIR -DGPIO -DRPI -DUSE_SSL -DLINKALL -I./include -I./include/opus -I./include/alac -I/usr/local/include -s -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s
 
 LDFLAGS=-L./lib -L/usr/local/lib -s
 
