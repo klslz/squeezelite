@@ -356,17 +356,14 @@ static bool load_flac() {
 		return false;
 	}
 
-<<<<<<< HEAD
 	// ignore error for this new API
-	f->FLAC__stream_decoder_set_ogg_chaining = dlsym(handle, "FLAC__stream_decoder_set_ogg_chaining");
-	if (!f->FLAC__stream_decoder_set_ogg_chaining) {
+	f->FLAC__stream_decoder_init_ogg_stream = dlsym(handle, "FLAC__stream_decoder_init_ogg_stream");
+	if (!f->FLAC__stream_decoder_init_ogg_stream) {
                if ((err = dlerror()) != NULL) {
                        LOG_INFO("dlerror: %s", err);
                }
 		LOG_INFO("OggFlac chaining disabled");
 	}
-=======
->>>>>>> master
 	LOG_INFO("loaded %s", name);
 #elif FLAC_API_VERSION_CURRENT < 14
 	LOG_INFO("OggFlac chaining disabled");
