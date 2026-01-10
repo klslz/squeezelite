@@ -3,7 +3,7 @@
  *
  *  (c) Adrian Smith 2012-2015, triode1@btinternet.com
  *      Ralph Irving 2015-2025, ralph_irving@hotmail.com
- *  (c) Klaus Schulz 2019-2026, kls.schlz@gmail.com - for modifications
+ *  (c) Klaus Schulz 2019-2026, kls.schlz@gmail.com
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@
 
 #include <signal.h>
 
-#define TITLE "Squeezelite " VERSION ", Copyright 2012-2015 Adrian Smith, 2015-2025 Ralph Irving, 2020-2025 Klaus Schulz."
+#define TITLE "Squeezelite " VERSION ", Copyright 2012-2015 Adrian Smith, 2015-2025 Ralph Irving, 2019-2026 Klaus Schulz."
 
 #define CODECS_BASE "flac,pcm,ogg"
 #if NO_FAAD
@@ -139,7 +139,7 @@ static void usage(const char *argv0) {
 # if ALSA
 		   "  -O <mixer device>\tSpecify mixer device, defaults to 'output device'\n"
 		   "  -L \t\t\tList volume controls for output device\n"
-		   "  -U <control>\t\tVolume control external (HW) on audio interface. Set to 100% = 0dB. (not supported with -V)\n"
+		   "  -U <control>\t\tVolume control external (HW) on audio interface. Set to 100\% = 0dB. (not supported with -V)\n"
 		   "  -V <control>\t\tVolume control external (HW) on audio interface. Follows non-linear LMS VC scale - 1click <> 1dB\n"
 		   "  -X \t\t\tVolume control external (HW) on audio interface. Linear dB-scale - 1click = 1dB\n"
 		   "  -Y \t\t\tVolume control internal. Linear dB-scale - 1click = 1dB\n"
@@ -262,16 +262,19 @@ static void license(void) {
 		   "GNU General Public License for more details.\n\n"
 		   "You should have received a copy of the GNU General Public License\n"
 		   "along with this program.  If not, see <http://www.gnu.org/licenses/>.\n"
-		   "\nContains modifications by (c) Klaus Schulz - Copyright 2020-2021\n"
-		   " * linear 1click/dB internal and external volume control\n"
-		   " * change CPU affinity of output_alsa thread\n"
-		   " * threadnaming\n"
-		   " * RPi3/4 Makefiles\n"
 		   "\nThe Squeezelite source code is available on github.\n"
 		   "<https://github.com/ralph-irving/squeezelite>\n"
 
 		   "\nThe source and patches for bundled 3rd party libraries can be found on\n"
 		   "SourceForge. <https://sourceforge.net/projects/lmsclients/files/source/>\n"
+
+		   "\nModifications by (c) Klaus Schulz - Copyright 2019-2026\n"
+		   " * linear 1click/dB internal and external volume control\n"
+		   " * change CPU affinity of output_alsa thread\n"
+		   " * thread naming\n"
+		   " * RPi3/4/5 Makefiles\n"
+		   "\nThe squeezelite-sc source code is available on github.\n"
+		   "https://github.com/klslz/squeezelite/squeezelite-sc\n"
 
 #if DSD		   
 		   "\nContains dsd2pcm library Copyright 2009, 2011 Sebastian Gesemann which\n"
@@ -287,19 +290,11 @@ static void license(void) {
 		   "<https://sourceforge.net/projects/lmsclients/files/source/>\n"
 #endif
 #if OPUS
-<<<<<<< HEAD
 		   "\nOpus decoder support (c) Philippe 2018-2024, philippe_44@outlook.com\n"
 #endif
 #if ALAC	
 		   "\nContains Apple Lossless (ALAC) decoder. Apache License Version 2.0\n"
 		   "Apple ALAC decoder support (c) Philippe 2018-2024, philippe_44@outlook.com\n"
-=======
-		   "\nOpus decoder support (c) Philippe 2018-2025, philippe_44@outlook.com\n"
-#endif
-#if ALAC	
-		   "\nContains Apple Lossless (ALAC) decoder. Apache License Version 2.0\n"
-		   "Apple ALAC decoder support (c) Philippe 2018-2025, philippe_44@outlook.com\n"
->>>>>>> master
 #endif
 		   "\n"
 		   );

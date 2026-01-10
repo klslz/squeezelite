@@ -1,11 +1,12 @@
-# RPI makefile for UX systems that autodetects
-#  - bitdepth of system
-#  - RPi standard and CM models 3,4,5
-# and applies optimal processor specific compiler options
+# RPi makefile for UX systems 
+#  - autodetecs OS archtitecture (32/64)
+#  - supports standard and CM models 3,4,5
+#  - applies optimal processor specific compiler options
+#  - applies minimum set of features
 
 SHELL := /bin/sh
 
-bitd_s := $(shell getconf LONG_BIT)
+OS_architecture := $(shell getconf LONG_BIT)
 
 #RPI5
 CPART := $(shell cat /proc/cpuinfo | grep part | grep -q 0xd0b && echo cortex-a76)
@@ -19,7 +20,6 @@ endif
 ifndef CPART
    CPART := $(shell cat /proc/cpuinfo | grep part | grep -q 0xd03 && echo cortex-a53)
 endif
-
 
 ifndef CPART
    $(error "Problems identifiying RPi 3,4 or 5!")
@@ -35,20 +35,19 @@ endif
 
 MTUNE := -mtune=$(CPART)
 
-
-ifeq ($(bitd_s),64)
+ifeq ($(OS_architecture),64)
    TUNEOPTS := 
-else ifeq ($(bitd_s),32)
+else ifeq ($(OS_architecture),32)
    TUNEOPTS := -mfpu=neon-fp-armv8 -mfloat-abi=hard
 endif
 
-# $(info bitd_s=$(bitd_s))
+# $(info OS_architecture=$(OS_architecture))
 # $(info CPART=$(CPART))
 # $(info TUNEOPTS=$(TUNEOPTS))
 # $(info MARCH=$(MARCH))
 # $(info MTUNE=$(MTUNE))
 
 OPTS = -DNO_FAAD
-CFLAGS = -Wall -fPIC -Ofast $(MARCH) $(MTUNE) $(TUNEOPTS) -pipe
+CFLAGS = -O3 $(MARCH) $(MTUNE) $(TUNEOPTS) -flto=auto -ffunction-sections -fdata-sections -pipe -Wall -fPIC 
 
-include Makefile.sc-rpi-ux
+include Makefile
